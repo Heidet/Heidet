@@ -3,8 +3,6 @@
 
 <p align="left"> <img src="https://komarev.com/ghpvc/?username=heidet&label=Profile%20views&color=0e75b6&style=flat" alt="heidet" /> </p>
 
-<p align="left"> <a href="https://github.com/ryo-ma/github-profile-trophy"><img src="https://github-profile-trophy.vercel.app/?username=heidet" alt="heidet" /></a> </p>
-
 - 🔭 I’m currently working on **Collab_App**
 
 - 🌱 I’m currently learning **ExtJS, React, Django, Ansible, Docker**
