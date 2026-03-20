@@ -9,7 +9,7 @@
 
 - 👨‍💻 All of my projects are available at [https://github.com/Heidet](https://github.com/Heidet)
 
-- 👨‍💻 My website page [https://antoine-heidet.fr](https://github.com/Heidet)
+- 👨‍💻 My website page [https://antoine-heidet.fr](https://antoine-heidet.fr)
 
 - 📫 How to reach me **a.heidet90400@gmail.com**
 
