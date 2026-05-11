@@ -15,5 +15,5 @@ jobs:
       - name: Generate TryHackMe badge
         uses: p4p1/tryhackme-badge-workflow@main
         with:
-          username: "Antoine.h"
+          username: "Antoineh"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
