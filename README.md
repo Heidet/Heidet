@@ -18,13 +18,13 @@
 <h3 align="left">Connect with me:</h3>
 <p align="left">
 <a href="https://linkedin.com/in/https://fr.linkedin.com/in/antoine-heidet" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/linked-in-alt.svg" alt="https://fr.linkedin.com/in/antoine-heidet" height="30" width="40" /></a>
-</p>
-<h3 align="left">TryHackMe:</h3>
-<p align="left">
-[![Heidet tryhackme stats](https://raw.githubusercontent.com/Heidet/Heidet/master/assets/thm_propic.png)][tryhackme]
-<source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Heidet/Heidet/master/assets/thm_propic.png">
+<!-- </p> -->
+<!-- <h3 align="left">TryHackMe:</h3> -->
+<!-- <p align="left"> -->
+<!-- [![Heidet tryhackme stats](https://raw.githubusercontent.com/Heidet/Heidet/main/assets/thm_propic.png)][tryhackme] -->
+<!-- <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Heidet/Heidet/master/assets/thm_propic.png"> -->
 
-</p>
+<!-- </p> -->
 
 <h3 align="left">Languages and Tools:</h3>
 <table>
