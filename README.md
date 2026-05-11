@@ -21,7 +21,7 @@
 </p>
 <h3 align="left">TryHackMe:</h3>
 <p align="left">
-![tryhackme stats](https://raw.githubusercontent.com/Heidet/Heidet/master/assets/thm_propic.png)
+[![Heidet tryhackme stats](https://raw.githubusercontent.com/Heidet/Heidet/master/assets/thm_propic.png)][tryhackme]
 <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Heidet/Heidet/master/assets/thm_propic.png">
 
 </p>
