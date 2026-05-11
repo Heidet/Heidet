@@ -1,0 +1,19 @@
+name: TryHackMe Badge
+
+on:
+  schedule:
+    - cron: "0 0 * * *"
+  workflow_dispatch:
+
+jobs:
+  update-badge:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Generate TryHackMe badge
+        uses: p4p1/tryhackme-badge-workflow@main
+        with:
+          username: "Antoine.h"
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
