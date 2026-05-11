@@ -21,9 +21,7 @@
 </p>
 <h3 align="left">TryHackMe:</h3>
 <p align="left">
-  <a href="https://tryhackme.com/p/Antoineh">
-    <img src="https://img.shields.io/badge/TryHackMe-Antoineh-red?logo=tryhackme" />
-  </a>
+![TryHackMe](assets/thm_propic.png)
 </p>
 
 <h3 align="left">Languages and Tools:</h3>
