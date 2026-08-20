@@ -1,9 +1,12 @@
 // Sonde tryhackme.com depuis l'endroit où ce script tourne, et écrit un rapport
-// Markdown. Objectif : savoir précisément ce qui est filtré depuis un runner
-// GitHub, au lieu de corriger à l'aveugle.
+// Markdown dans assets/thm/_diagnostic.md (commité par le workflow, parce que
+// les logs d'Actions ne sont lisibles qu'avec les droits admin du dépôt).
 //
-// Le rapport est commité dans le repo (et non seulement affiché dans les logs)
-// parce que les logs d'Actions ne sont lisibles qu'avec les droits admin.
+// Passe 2 : le premier diagnostic a montré que tryhackme.com renvoie 429 avec
+// une page « Vercel Security Checkpoint » qui ne pose jamais de cookie, alors
+// que navigator.webdriver valait true. On teste donc si le challenge se résout
+// une fois les marqueurs d'automatisation masqués, et on vide le contenu de la
+// page de challenge pour savoir ce qu'elle attend réellement.
 //
 // Fichier de travail : à supprimer une fois le diagnostic terminé.
 
@@ -19,113 +22,112 @@ const log = (s) => { console.log(s); lignes.push(s); };
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const court = (s, n = 120) => String(s).replace(/\s+/g, ' ').trim().slice(0, n);
 
-log('# Diagnostic TryHackMe depuis un runner GitHub\n');
+log('# Diagnostic TryHackMe — passe 2 (masquage de l\'automatisation)\n');
 
-// --- contexte ---------------------------------------------------------------
 try {
   const ip = await (await fetch('https://api.ipify.org?format=json')).json();
-  log(`- IP publique du runner : \`${ip.ip}\``);
-} catch { log('- IP publique du runner : non déterminée'); }
-log(`- Node : \`${process.version}\``);
+  log(`- IP publique : \`${ip.ip}\``);
+} catch { log('- IP publique : non déterminée'); }
 log('');
 
-// --- 1. fetch brut ----------------------------------------------------------
-log('## 1. `fetch` brut, sans navigateur\n');
-for (const [nom, url] of [['API publique', API], ['page profil', `https://tryhackme.com/p/${USER}`]]) {
-  try {
-    const r = await fetch(url, { headers: { 'User-Agent': 'Mozilla/5.0 Chrome/140.0.0.0' } });
-    const t = await r.text();
-    log(`- ${nom} : **HTTP ${r.status}**${CHECKPOINT.test(t) ? ' — page de challenge' : ''} — \`${court(t, 90)}\``);
-  } catch (e) { log(`- ${nom} : échec — \`${court(e.message, 90)}\``); }
-}
-log('');
-
-// --- 2. navigateur ----------------------------------------------------------
-let browser, canal = 'chromium';
-try { browser = await chromium.launch({ channel: 'chromium' }); }
-catch { canal = 'headless par défaut'; browser = await chromium.launch(); }
-log(`## 2. Navigateur (canal : ${canal})\n`);
+// --- navigateur maquillé ----------------------------------------------------
+// --disable-blink-features=AutomationControlled retire le drapeau que Chromium
+// expose normalement ; le reste des marqueurs est corrigé côté page.
+const browser = await chromium.launch({
+  channel: 'chromium',
+  args: [
+    '--disable-blink-features=AutomationControlled',
+    '--disable-features=IsolateOrigins,site-per-process',
+  ],
+}).catch(() => chromium.launch({ args: ['--disable-blink-features=AutomationControlled'] }));
 
 const ctx = await browser.newContext({
   locale: 'fr-FR',
   timezoneId: 'Europe/Paris',
+  viewport: { width: 1440, height: 900 },
   userAgent:
     'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 ' +
     '(KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36',
+  extraHTTPHeaders: { 'Accept-Language': 'fr-FR,fr;q=0.9,en;q=0.8' },
 });
+
+await ctx.addInitScript(() => {
+  Object.defineProperty(navigator, 'webdriver', { get: () => undefined });
+  Object.defineProperty(navigator, 'languages', { get: () => ['fr-FR', 'fr', 'en'] });
+  Object.defineProperty(navigator, 'plugins', { get: () => [1, 2, 3, 4, 5] });
+  Object.defineProperty(navigator, 'hardwareConcurrency', { get: () => 8 });
+  Object.defineProperty(navigator, 'deviceMemory', { get: () => 8 });
+  window.chrome = { runtime: {}, app: {}, csi: () => {}, loadTimes: () => {} };
+  const q = window.navigator.permissions.query;
+  window.navigator.permissions.query = (p) =>
+    p.name === 'notifications' ? Promise.resolve({ state: Notification.permission }) : q(p);
+});
+
 const page = await ctx.newPage();
 
-log(`- User-Agent réel : \`${await page.evaluate(() => navigator.userAgent)}\``);
+log('## Marqueurs après maquillage\n');
+await page.goto('about:blank');
 log(`- \`navigator.webdriver\` : \`${await page.evaluate(() => navigator.webdriver)}\``);
+log(`- \`navigator.languages\` : \`${await page.evaluate(() => navigator.languages.join(','))}\``);
+log(`- \`window.chrome\` présent : \`${await page.evaluate(() => !!window.chrome)}\``);
 log('');
 
-// Le point clé : le challenge finit-il par se résoudre si on attend ?
-log('### Le challenge se résout-il avec le temps ?\n');
-log('| t | page | HTTP | titre | cookies |');
-log('|---|------|------|-------|---------|');
-const t0 = Date.now();
+// --- le challenge se résout-il maintenant ? ---------------------------------
+log('## Le challenge se résout-il ?\n');
+log('| t | HTTP | titre | cookies |');
+log('|---|------|-------|---------|');
+
 let franchi = false;
-for (let i = 0; i < 12; i++) {
-  const r = await page.goto('https://tryhackme.com/', { waitUntil: 'domcontentloaded', timeout: 45_000 })
+const t0 = Date.now();
+for (let i = 0; i < 8; i++) {
+  const r = await page.goto('https://tryhackme.com/', { waitUntil: 'networkidle', timeout: 60_000 })
                       .catch(() => null);
   const titre = await page.title().catch(() => '?');
   const cookies = (await ctx.cookies()).map((c) => c.name);
-  const s = Math.round((Date.now() - t0) / 1000);
-  log(`| ${s}s | accueil | ${r ? r.status() : 'échec'} | ${court(titre, 40)} | ${cookies.join(', ') || '—'} |`);
+  log(`| ${Math.round((Date.now() - t0) / 1000)}s | ${r ? r.status() : 'échec'} | ${court(titre, 34)} | ${cookies.join(', ') || '—'} |`);
   if (r && r.status() === 200 && !CHECKPOINT.test(titre)) { franchi = true; break; }
-  await sleep(10_000);
+  await sleep(8_000);
 }
 log('');
-log(franchi ? '**Challenge franchi.**' : '**Challenge jamais franchi après ~2 min.**');
+log(franchi ? '**Challenge franchi.**' : '**Challenge toujours pas franchi.**');
 log('');
 
-// --- 3. quelles routes sont filtrées ? --------------------------------------
-// Le badge en iframe est conçu pour être embarqué sur des sites tiers : il est
-// possible qu'il soit exempté de la protection, contrairement à l'API.
-log('### Routes testées une par une\n');
-log('| route | HTTP | titre / début du corps |');
-log('|-------|------|------------------------|');
-const routes = [
-  ['API public-profile', API],
-  ['page profil', `https://tryhackme.com/p/${USER}`],
-  ['badge iframe (id tiers)', 'https://tryhackme.com/api/v2/badges/public-profile?userPublicId=140548'],
-  ['badge S3 legacy', 'https://tryhackme-badges.s3.amazonaws.com/tryhackme.png'],
-  ['CDN avatars', 'https://cdn-images.tryhackme.com/user-avatars/69de52c5502824f8288572fe-1787220248276'],
-];
-for (const [nom, url] of routes) {
-  const r = await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 45_000 }).catch(() => null);
-  let apercu = '';
-  try { apercu = CHECKPOINT.test(await page.title()) ? 'CHECKPOINT' : court(await page.evaluate(() => document.body.innerText), 70); }
-  catch { apercu = '(non textuel)'; }
-  log(`| ${nom} | ${r ? r.status() : 'échec'} | \`${apercu}\` |`);
-}
+// --- que contient la page de challenge ? ------------------------------------
+// C'est l'information qui manquait : sans elle on corrige a l'aveugle.
+log('## Contenu de la page de challenge\n');
+try {
+  const info = await page.evaluate(() => ({
+    html: document.documentElement.outerHTML.length,
+    scripts: [...document.scripts].map((s) => s.src || `[inline ${s.textContent.length} car.]`),
+    texte: document.body.innerText,
+    meta: [...document.querySelectorAll('meta')].map((m) => m.outerHTML),
+  }));
+  log(`- Taille du HTML : ${info.html} caractères`);
+  log(`- Texte visible : \`${court(info.texte, 200)}\``);
+  log('- Scripts :');
+  info.scripts.forEach((s) => log(`  - \`${court(s, 130)}\``));
+  log('- Balises meta :');
+  info.meta.slice(0, 8).forEach((m) => log(`  - \`${court(m, 130)}\``));
+
+  const inline = await page.evaluate(() =>
+    [...document.scripts].filter((s) => !s.src).map((s) => s.textContent).join('\n').slice(0, 1500));
+  if (inline.trim()) {
+    log('\n<details><summary>Script inline du challenge</summary>\n');
+    log('```js');
+    log(inline);
+    log('```\n</details>');
+  }
+} catch (e) { log(`- lecture impossible : \`${court(e.message, 100)}\``); }
 log('');
+
+// --- si franchi, l'API repond-elle ? ----------------------------------------
+if (franchi) {
+  const r = await page.goto(API, { waitUntil: 'domcontentloaded', timeout: 45_000 }).catch(() => null);
+  const corps = await page.evaluate(() => document.body.innerText).catch(() => '');
+  log(`## API après franchissement\n\n- HTTP ${r ? r.status() : 'échec'} — \`${court(corps, 150)}\``);
+}
 
 await browser.close();
-
-// --- 4. relais publics ------------------------------------------------------
-log('## 3. Relais publics, appelés depuis le runner\n');
-log('| relais | résultat |');
-log('|--------|----------|');
-const enc = encodeURIComponent(API);
-const relais = [
-  ['allorigins', `https://api.allorigins.win/raw?url=${enc}`],
-  ['codetabs', `https://api.codetabs.com/v1/proxy?quest=${enc}`],
-  ['jina reader', `https://r.jina.ai/${API}`],
-  ['cors.lol', `https://api.cors.lol/?url=${enc}`],
-  ['thingproxy', `https://thingproxy.freeboard.io/fetch/${API}`],
-];
-for (const [nom, url] of relais) {
-  try {
-    const ctrl = new AbortController();
-    const t = setTimeout(() => ctrl.abort(), 25_000);
-    const r = await fetch(url, { signal: ctrl.signal });
-    clearTimeout(t);
-    const txt = await r.text();
-    const ok = txt.includes('"totalPoints"');
-    log(`| ${nom} | ${ok ? '**OK — JSON reçu**' : `HTTP ${r.status} — \`${court(txt, 70)}\``} |`);
-  } catch (e) { log(`| ${nom} | échec — \`${court(e.message, 60)}\` |`); }
-}
 
 writeFileSync('assets/thm/_diagnostic.md', lignes.join('\n') + '\n', 'utf8');
 console.log('\nRapport écrit dans assets/thm/_diagnostic.md');
