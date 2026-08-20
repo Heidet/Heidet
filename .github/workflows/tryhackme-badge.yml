@@ -1,0 +1,60 @@
+name: Carte TryHackMe
+
+# TryHackMe ne sert plus de PNG statique : l'URL qu'elle annonce elle-même
+# (tryhackme-badges.s3.amazonaws.com/<pseudo>.png) répond 403, et son badge
+# actuel est une iframe, que GitHub ne rend pas dans un README.
+#
+# Ce workflow lit donc l'API publique /api/v2/public-profile, dessine la carte
+# avec assets/thm/card.html et en committe un PNG. Rien à faire à la main :
+# le seul réglage est le pseudo ci-dessous.
+
+on:
+  schedule:
+    - cron: '17 */6 * * *'      # 4x/jour. Minute décalée : les crons à "0" sont saturés chez GitHub.
+  workflow_dispatch:            # bouton "Run workflow" pour forcer une mise à jour
+  push:
+    branches: [main]
+    paths:
+      - 'assets/thm/**'
+      - '.github/workflows/tryhackme-badge.yml'
+
+permissions:
+  contents: write               # nécessaire pour committer le PNG régénéré
+
+concurrency:
+  group: carte-tryhackme
+  cancel-in-progress: true
+
+jobs:
+  carte:
+    runs-on: ubuntu-latest
+    env:
+      THM_USERNAME: Antoineh
+      OUT_PATH: assets/tryhackme-card.png
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Installer Playwright et Chromium
+        run: |
+          npm install --prefix assets/thm --no-audit --no-fund
+          npx --prefix assets/thm playwright install --with-deps chromium
+
+      - name: Générer la carte
+        run: node assets/thm/shoot.mjs
+
+      - name: Committer si les stats ont bougé
+        run: |
+          if git diff --quiet -- "$OUT_PATH"; then
+            echo "Stats identiques au dernier run, rien à committer."
+            exit 0
+          fi
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- "$OUT_PATH"
+          git commit -m "chore: mise à jour de la carte TryHackMe"
+          git push

@@ -1,0 +1,9 @@
+{
+  "name": "thm-card",
+  "private": true,
+  "type": "module",
+  "description": "Genere la carte TryHackMe affichee dans le README du profil.",
+  "devDependencies": {
+    "playwright": "^1.62.1"
+  }
+}
