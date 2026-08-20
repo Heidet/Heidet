@@ -18,18 +18,11 @@
      assets/thm/card.html dans un Chromium headless, et committe
      assets/tryhackme-card.png si les stats ont bougé. Rien à faire à la main. -->
 
-<h1 align="center">Hi 👋, I'm antoine heidet</h1>
 <h3 align="center">DevOps Django / React</h3>
 
 <p align="left"> <img src="https://komarev.com/ghpvc/?username=heidet&label=Profile%20views&color=0e75b6&style=flat" alt="heidet" /> </p>
 
-- 🔭 I’m currently working on **Collab_App**
-
 - 🌱 I’m currently learning **ExtJS, React, Django, Ansible, Docker**
-
-- 👨‍💻 All of my projects are available at [https://github.com/Heidet](https://github.com/Heidet)
-
-- 👨‍💻 My website page [https://antoine-heidet.fr](https://antoine-heidet.fr)
 
 - 📫 How to reach me **a.heidet90400@gmail.com**
 
