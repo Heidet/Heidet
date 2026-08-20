@@ -1,3 +1,23 @@
+<p align="center">
+  <a href="https://tryhackme.com/p/Antoineh">
+    <img
+      src="https://raw.githubusercontent.com/Heidet/Heidet/main/assets/tryhackme-card.png"
+      alt="Profil TryHackMe d'Antoineh : niveau, points, rooms, badges et streak"
+      width="820" />
+  </a>
+  <br />
+  <a href="https://tryhackme.com/p/Antoineh">
+    <img
+      src="https://img.shields.io/badge/TryHackMe-Antoineh-88CC14?style=for-the-badge&logo=tryhackme&logoColor=88CC14&labelColor=0a0f1c"
+      alt="TryHackMe : Antoineh" />
+  </a>
+</p>
+
+<!-- Carte régénérée toutes les 6 h par .github/workflows/tryhackme-badge.yml :
+     le workflow lit l'API publique tryhackme.com/api/v2/public-profile, dessine
+     assets/thm/card.html dans un Chromium headless, et committe
+     assets/tryhackme-card.png si les stats ont bougé. Rien à faire à la main. -->
+
 <h1 align="center">Hi 👋, I'm antoine heidet</h1>
 <h3 align="center">DevOps Django / React</h3>
 
@@ -20,29 +40,6 @@
 <a href="https://fr.linkedin.com/in/antoine-heidet" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/linked-in-alt.svg" alt="LinkedIn : antoine-heidet" height="30" width="40" /></a>
 <a href="https://tryhackme.com/p/Antoineh" target="blank"><img align="center" src="https://cdn.simpleicons.org/tryhackme/88CC14" alt="TryHackMe Antoineh" height="26" width="40" /></a>
 </p>
-
-<h3 align="left">TryHackMe:</h3>
-<p align="center">
-  <a href="https://tryhackme.com/p/Antoineh">
-    <img
-      src="https://raw.githubusercontent.com/Heidet/Heidet/main/assets/tryhackme-card.png"
-      alt="Profil TryHackMe d'Antoineh : niveau, points, rooms, badges et streak"
-      width="820" />
-  </a>
-</p>
-<p align="center">
-  <a href="https://tryhackme.com/p/Antoineh">
-    <img
-      src="https://img.shields.io/badge/TryHackMe-Antoineh-88CC14?style=for-the-badge&logo=tryhackme&logoColor=88CC14&labelColor=0a0f1c"
-      alt="TryHackMe : Antoineh" />
-  </a>
-</p>
-
-<!-- La carte ci-dessus est régénérée toutes les 6 h par
-     .github/workflows/tryhackme-badge.yml : le workflow lit l'API publique
-     tryhackme.com/api/v2/public-profile, dessine assets/thm/card.html dans un
-     Chromium headless et committe assets/tryhackme-card.png si les stats ont
-     bougé. Rien à faire à la main. -->
 
 <h3 align="left">Languages and Tools:</h3>
 <table>
