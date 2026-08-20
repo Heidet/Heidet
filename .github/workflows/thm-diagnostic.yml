@@ -1,0 +1,52 @@
+name: Diagnostic TryHackMe
+
+# Workflow temporaire. Il sonde tryhackme.com depuis le runner et committe le
+# resultat dans assets/thm/_diagnostic.md, parce que les logs d'Actions ne sont
+# lisibles qu'avec les droits admin du depot. A supprimer une fois le probleme
+# de filtrage tranche.
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'assets/thm/diagnose.mjs'
+      - '.github/workflows/thm-diagnostic.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  diagnostic:
+    runs-on: ubuntu-latest
+    env:
+      THM_USERNAME: Antoineh
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Installer Playwright et Chromium
+        run: |
+          npm install --prefix assets/thm --no-audit --no-fund
+          npx --prefix assets/thm playwright install --with-deps chromium
+
+      # continue-on-error : meme si une sonde plante, on veut le rapport partiel.
+      - name: Sonder TryHackMe
+        continue-on-error: true
+        run: node assets/thm/diagnose.mjs
+
+      - name: Committer le rapport
+        run: |
+          if [ ! -f assets/thm/_diagnostic.md ]; then
+            echo "Aucun rapport produit."; exit 1
+          fi
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f -- assets/thm/_diagnostic.md
+          git diff --cached --quiet && { echo "Rapport inchange."; exit 0; }
+          git commit -m "chore: rapport de diagnostic TryHackMe"
+          git push
