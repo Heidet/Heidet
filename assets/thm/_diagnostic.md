@@ -1,53 +1,43 @@
-# Diagnostic TryHackMe depuis un runner GitHub
+# Diagnostic TryHackMe — passe 2 (masquage de l'automatisation)
 
-- IP publique du runner : `64.236.176.230`
-- Node : `v22.23.2`
+- IP publique : `20.109.38.185`
 
-## 1. `fetch` brut, sans navigateur
+## Marqueurs après maquillage
 
-- API publique : **HTTP 429** — page de challenge — `<!DOCTYPE html><html lang="en" data-astro-cid-nbv56vs3> <head><meta charset="utf-8"><meta `
-- page profil : **HTTP 429** — page de challenge — `<!DOCTYPE html><html lang="en" data-astro-cid-nbv56vs3> <head><meta charset="utf-8"><meta `
+- `navigator.webdriver` : `undefined`
+- `navigator.languages` : `fr-FR,fr,en`
+- `window.chrome` présent : `true`
 
-## 2. Navigateur (canal : chromium)
+## Le challenge se résout-il ?
 
-- User-Agent réel : `Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36`
-- `navigator.webdriver` : `true`
+| t | HTTP | titre | cookies |
+|---|------|-------|---------|
+| 1s | 429 | Vercel Security Checkpoint | — |
+| 9s | 429 | Vercel Security Checkpoint | — |
+| 18s | 429 | Vercel Security Checkpoint | — |
+| 27s | 429 | Vercel Security Checkpoint | — |
+| 35s | 429 | Vercel Security Checkpoint | — |
+| 44s | 429 | Vercel Security Checkpoint | — |
+| 53s | 429 | Vercel Security Checkpoint | — |
+| 61s | 429 | Vercel Security Checkpoint | — |
 
-### Le challenge se résout-il avec le temps ?
+**Challenge toujours pas franchi.**
 
-| t | page | HTTP | titre | cookies |
-|---|------|------|-------|---------|
-| 0s | accueil | 429 | Vercel Security Checkpoint | — |
-| 10s | accueil | 429 | Vercel Security Checkpoint | — |
-| 20s | accueil | 429 | Vercel Security Checkpoint | — |
-| 30s | accueil | 429 | Vercel Security Checkpoint | — |
-| 40s | accueil | 429 | Vercel Security Checkpoint | — |
-| 50s | accueil | 429 | Vercel Security Checkpoint | — |
-| 60s | accueil | 429 | Vercel Security Checkpoint | — |
-| 71s | accueil | 429 | Vercel Security Checkpoint | — |
-| 81s | accueil | 429 | Vercel Security Checkpoint | — |
-| 91s | accueil | 429 | Vercel Security Checkpoint | — |
-| 101s | accueil | 429 | Vercel Security Checkpoint | — |
-| 111s | accueil | 429 | Vercel Security Checkpoint | — |
+## Contenu de la page de challenge
 
-**Challenge jamais franchi après ~2 min.**
+- Taille du HTML : 29797 caractères
+- Texte visible : `Échec de la vérification de votre navigateur Code 21 Point de contrôle de sécurité Vercel | iad1::1787235084-L7HqXG3vG3UC7J4xD98JVkMnveLT5vca`
+- Scripts :
+  - `[inline 23347 car.]`
+- Balises meta :
+  - `<meta charset="utf-8">`
+  - `<meta name="viewport" content="width=device-width, initial-scale=1">`
+  - `<meta name="theme-color" content="#000">`
 
-### Routes testées une par une
+<details><summary>Script inline du challenge</summary>
 
-| route | HTTP | titre / début du corps |
-|-------|------|------------------------|
-| API public-profile | 429 | `CHECKPOINT` |
-| page profil | 429 | `CHECKPOINT` |
-| badge iframe (id tiers) | 429 | `CHECKPOINT` |
-| badge S3 legacy | 200 | `` |
-| CDN avatars | 200 | `` |
+```js
+(function(e,a){const c=d,t=e();for(;;)try{if(-parseInt(c(257))/1*(-parseInt(c(243))/2)+-parseInt(c(241))/3*(-parseInt(c(259))/4)+-parseInt(c(247))/5*(parseInt(c(235))/6)+parseInt(c(256))/7*(parseInt(c(237))/8)+parseInt(c(255))/9+-parseInt(c(266))/10*(parseInt(c(270))/11)+-parseInt(c(244))/12===a)break;t.push(t.shift())}catch{t.push(t.shift())}})(_,905427);const q=function(){let e=!0;return function(a,c){const t=e?function(){const n=d;if(c){const r=c[n(245)+"ly"](a,arguments);return c=null,r}}:function(){};return e=!1,t}}(),S=q(void 0,function(){const e=d;return S[e(254)+e(253)+"ng"]()["sea"+e(258)](e(260)+e(251)+e(264)+e(267))[e(254)+e(253)+"ng"]()["con"+e(268)+e(271)+"or"](S)[e(250)+e(258)](e(260)+".+)"+e(264)+e(267))});S();function b(e,a){const c=d,t=document[c(265)+c(248)+c(252)+c(246)+"Id"](e);t&&(t[c(269)+c(263)+c(238)]=a)}function D(e,a,c){const t=d;document[t(265)+"Elemen"+t(246)+"Id"](e)?.[t(236)+"le"][t(249)+t(262)+"perty"](a,c)}function B(e){const a=d;document[a(265)+a(248)+"men"+a(246)+"Id"](e)?.[a(239)+a(261)](),document["que"+a(242)+a(240)+"ctor"](e)?.[a(239)+a(261)]()}function d(e,a){const c=_();return d=function(t,n){return t=t-(-1*6747+-3*-133+6583),c[t]},d(e,a)}function _(){const e=["4140392VdEHdb","(((","ove","Pro","erT","+)+","get","566330mUeXVY",")+$","str","inn","275xpgwDC","uct","8233074uolnGw","sty","1041376ficGYW","ext","rem","ele","3QGYwtf","ryS","4VTIlBG","653280NifcvE","app","tBy","5kfnsuG","Ele","set","sea",".+)","men","tri","toS","13501035SzeBFy",
+```
+</details>
 
-## 3. Relais publics, appelés depuis le runner
-
-| relais | résultat |
-|--------|----------|
-| allorigins | HTTP 200 — `<!DOCTYPE html><html lang="en" data-astro-cid-nbv56vs3> <head><meta ch` |
-| codetabs | HTTP 522 — `<!DOCTYPE html> <!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="` |
-| jina reader | HTTP 200 — `Title: Vercel Security Checkpoint URL Source: https://tryhackme.com/ap` |
-| cors.lol | HTTP 429 — `Rate limit exceeded` |
-| thingproxy | échec — `fetch failed` |
