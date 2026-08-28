@@ -1,3 +1,8 @@
+
+
+<h3 align="center">DevOps Django / React</h3>
+- 📄 Know about my experiences [6 Years Developper](6 Years Developper)
+
 <p align="center">
   <a href="https://tryhackme.com/p/Antoineh">
     <img
@@ -21,15 +26,7 @@
      assets/thm/card.html dans un Chromium headless, et committe
      assets/tryhackme-card.png si les stats ont bougé. Rien à faire à la main. -->
 
-<h3 align="center">DevOps Django / React</h3>
-
 <p align="left"> <img src="https://komarev.com/ghpvc/?username=heidet&label=Profile%20views&color=0e75b6&style=flat" alt="heidet" /> </p>
-
-- 🌱 I’m currently learning **ExtJS, React, Django, Ansible, Docker**
-
-- 📫 How to reach me **a.heidet90400@gmail.com**
-
-- 📄 Know about my experiences [6 Years Developper](6 Years Developper)
 
 <h3 align="left">Connect with me:</h3>
 <p align="left">
