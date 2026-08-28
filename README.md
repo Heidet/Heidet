@@ -12,7 +12,10 @@
       alt="TryHackMe : Antoineh" />
   </a>
 </p>
-
+  <a href="https://tryhackme.com/certification/certificate/0b0dd25f-d300-499d-949d-76005f93ab2c" target="_blank">
+    <img src="https://images.credly.com/size/340x340/images/4a4de480-0a93-47f3-ac6e-a10523c21938/blob" alt="TryHackMe
+  Badge" width="80">
+  </a>
 <!-- Carte régénérée toutes les 6 h par .github/workflows/tryhackme-badge.yml :
      le workflow lit l'API publique tryhackme.com/api/v2/public-profile, dessine
      assets/thm/card.html dans un Chromium headless, et committe
