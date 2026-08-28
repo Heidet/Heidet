@@ -1,7 +1,7 @@
 
 
 <h3 align="center">DevOps Django / React</h3>
-- 📄 Know about my experiences [6 Years Developper](6 Years Developper)
+<h5 align="center">- 📄 Know about my experiences [6 Years Developper](6 Years Developper)</h5>
 
 <p align="center">
   <a href="https://tryhackme.com/p/Antoineh">
@@ -11,16 +11,16 @@
       width="820" />
   </a>
   <br />
-  <a href="https://tryhackme.com/p/Antoineh">
+  <!-- <a href="https://tryhackme.com/p/Antoineh">
     <img
       src="https://img.shields.io/badge/TryHackMe-Antoineh-88CC14?style=for-the-badge&logo=tryhackme&logoColor=88CC14&labelColor=0a0f1c"
       alt="TryHackMe : Antoineh" />
-  </a>
+  </a> -->
 </p>
-  <a href="https://tryhackme.com/certification/certificate/0b0dd25f-d300-499d-949d-76005f93ab2c" target="_blank">
-    <img src="https://images.credly.com/size/340x340/images/4a4de480-0a93-47f3-ac6e-a10523c21938/blob" alt="TryHackMe
-  Badge" width="80">
-  </a>
+<a href="https://tryhackme.com/certification/certificate/0b0dd25f-d300-499d-949d-76005f93ab2c" target="_blank">
+  <img src="https://images.credly.com/size/340x340/images/4a4de480-0a93-47f3-ac6e-a10523c21938/blob" alt="TryHackMe
+Badge" width="80">
+</a>
 <!-- Carte régénérée toutes les 6 h par .github/workflows/tryhackme-badge.yml :
      le workflow lit l'API publique tryhackme.com/api/v2/public-profile, dessine
      assets/thm/card.html dans un Chromium headless, et committe
