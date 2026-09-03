@@ -28,12 +28,6 @@ Badge" width="80">
 
 <p align="left"> <img src="https://komarev.com/ghpvc/?username=heidet&label=Profile%20views&color=0e75b6&style=flat" alt="heidet" /> </p>
 
-<h3 align="left">Connect with me:</h3>
-<p align="left">
-<a href="https://fr.linkedin.com/in/antoine-heidet" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/linked-in-alt.svg" alt="LinkedIn : antoine-heidet" height="30" width="40" /></a>
-<a href="https://tryhackme.com/p/Antoineh" target="blank"><img align="center" src="https://cdn.simpleicons.org/tryhackme/88CC14" alt="TryHackMe Antoineh" height="26" width="40" /></a>
-</p>
-
 <h3 align="left">Languages and Tools:</h3>
 <table>
   <tr>
