@@ -6,7 +6,7 @@
 <p align="center">
   <a href="https://tryhackme.com/p/Antoineh">
     <img
-      src="https://raw.githubusercontent.com/Heidet/Heidet/main/assets/tryhackme-card.png?v=20260925171311"
+      src="https://raw.githubusercontent.com/Heidet/Heidet/main/assets/tryhackme-card.png?v=20260930091622"
       alt="Profil TryHackMe d'Antoineh : niveau, points, rooms, badges et streak"
       width="820" />
   </a>
